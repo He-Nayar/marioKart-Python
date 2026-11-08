@@ -7,6 +7,7 @@ GRID_COLS = 16
 GRID_ROWS = 12
 
 CAR_ACCELERATION = 0.05
+CAR_DECELERATION = 0.07 #ajouter pour utiliser les freins et la marche arriere dans brakesR
 CAR_WIDTH = 30
 CAR_HEIGHT = 50
 
