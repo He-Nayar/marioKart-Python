@@ -1,7 +1,7 @@
 import pygame
 import math
 from constants import (
-    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION
+    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, CAR_ROTATION_SPEED
 )
 
 
@@ -19,6 +19,10 @@ class Car:
     # ajout des methodes pour les autres touches et directions
     def brakesR(self):
         self.speed -= CAR_DECELERATION
+    def turnLeft(self):
+        self.angle += CAR_ROTATION_SPEED
+    def turnRight(self):
+        self.angle -= CAR_ROTATION_SPEED
 
     def update_position(self) -> None:
         self.y += self.speed

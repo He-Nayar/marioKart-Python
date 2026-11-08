@@ -64,6 +64,10 @@ class GameController:
         # les noms sont dans le fichier "input_handler"
         if player_input['brakesR']:
             car.brakesR()
+        if player_input['turnLeft']:
+            car.turnLeft()
+        if player_input['turnRight']:
+            car.turnRight()
 
     def render(self) -> None:
         self.view.draw(self.model)
