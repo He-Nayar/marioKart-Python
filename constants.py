@@ -12,6 +12,7 @@ CAR_DECELERATION = 0.07 #ajouter pour utiliser les freins et la marche arriere d
 CAR_ROTATION_SPEED = 1.5
 CAR_WIDTH = 30
 CAR_HEIGHT = 50
+FROTTEMENT = 0.98
 
 
 class GameState:

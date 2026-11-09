@@ -1,7 +1,7 @@
 import pygame
 import math
 from constants import (
-    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, CAR_ROTATION_SPEED
+    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, FROTTEMENT, CAR_ROTATION_SPEED
 )
 
 
@@ -15,7 +15,7 @@ class Car:
         self.sprite = self.build_sprite()
 
     def accelerate(self) -> None:
-        self.speed += CAR_ACCELERATION
+        self.speed +=  CAR_ACCELERATION
     # ajout des methodes pour les autres touches et directions
     def brakesR(self):
         self.speed -= CAR_DECELERATION
@@ -23,8 +23,11 @@ class Car:
         self.angle -= CAR_ROTATION_SPEED # on suit le repere de pygame donc y pointe vers le bas
     def turnRight(self):
         self.angle += CAR_ROTATION_SPEED
+    
+        
 
     def update_position(self) -> None:
+        self.speed = self.speed * FROTTEMENT   # frottement de l'air, à chaque image
         self.x += self.speed * math.cos(math.radians(self.angle))
         self.y += self.speed * math.sin(math.radians(self.angle))
 
