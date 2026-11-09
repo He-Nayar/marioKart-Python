@@ -20,17 +20,20 @@ class Car:
     def brakesR(self):
         self.speed -= CAR_DECELERATION
     def turnLeft(self):
-        self.angle += CAR_ROTATION_SPEED
+        self.angle -= CAR_ROTATION_SPEED # on suit le repere de pygame donc y pointe vers le bas
     def turnRight(self):
-        self.angle -= CAR_ROTATION_SPEED
+        self.angle += CAR_ROTATION_SPEED
 
     def update_position(self) -> None:
-        self.y += self.speed
+        self.x += self.speed * math.cos(math.radians(self.angle))
+        self.y += self.speed * math.sin(math.radians(self.angle))
 
     def build_sprite(self) -> pygame.Surface:
-        surf = pygame.Surface((CAR_WIDTH, CAR_HEIGHT), pygame.SRCALPHA)
-        pygame.draw.rect(surf, (255, 0, 0), (0, 0, CAR_WIDTH,
-                         CAR_HEIGHT), border_radius=5)
+        surf = pygame.Surface((CAR_HEIGHT, CAR_WIDTH), pygame.SRCALPHA)
+        pygame.draw.rect(surf, (255, 0, 0), (0, 0,CAR_HEIGHT,
+                         CAR_WIDTH), border_radius=5)
+        nez = 10
+        pygame.draw.rect(surf,(255,255,0),(CAR_HEIGHT - nez, 0, nez, CAR_WIDTH))
         return surf
 
     def get_rotated_sprite(self) -> tuple[pygame.Surface, pygame.Rect]:
