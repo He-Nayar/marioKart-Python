@@ -1,7 +1,8 @@
 import pygame
 import math
 from constants import (
-    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, FROTTEMENT, CAR_ROTATION_SPEED
+    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, 
+    FROTTEMENT, BRAQUAGE_MAX, FACTEUR_DE_ROT
 )
 
 
@@ -13,6 +14,7 @@ class Car:
         self.speed: float = 0.0
         self.angle: float = 0.0
         self.sprite = self.build_sprite()
+        self.steering_angle : float = 0.0  # braquage des roues (0 = roues droites)
 
     def accelerate(self) -> None:
         self.speed +=  CAR_ACCELERATION
@@ -20,16 +22,18 @@ class Car:
     def brakesR(self):
         self.speed -= CAR_DECELERATION
     def turnLeft(self):
-        self.angle -= CAR_ROTATION_SPEED # on suit le repere de pygame donc y pointe vers le bas
+        self.steering_angle = -BRAQUAGE_MAX  # on suit le repere de pygame donc y pointe vers le bas
     def turnRight(self):
-        self.angle += CAR_ROTATION_SPEED
+        self.steering_angle = BRAQUAGE_MAX
     
         
 
     def update_position(self) -> None:
         self.speed = self.speed * FROTTEMENT   # frottement de l'air, à chaque image
+        self.angle += FACTEUR_DE_ROT * self.speed * self.steering_angle   # tourne seulement si elle roule
         self.x += self.speed * math.cos(math.radians(self.angle))
         self.y += self.speed * math.sin(math.radians(self.angle))
+        self.steering_angle = 0.0   # roues droites si aucune touche a l'image suivante    
 
     def build_sprite(self) -> pygame.Surface:
         surf = pygame.Surface((CAR_HEIGHT, CAR_WIDTH), pygame.SRCALPHA)

@@ -9,10 +9,13 @@ GRID_ROWS = 12
 CAR_ACCELERATION = 0.05
 #constantes pour les directions
 CAR_DECELERATION = 0.07 #ajouter pour utiliser les freins et la marche arriere dans brakesR
-CAR_ROTATION_SPEED = 1.5
+#CAR_ROTATION_SPEED = 1.5
 CAR_WIDTH = 30
 CAR_HEIGHT = 50
 FROTTEMENT = 0.98
+BRAQUAGE_MAX = 30 #angle de braquage max des roues
+FACTEUR_DE_ROT = 0.02 #un facteur pour ajuster la vitesse de rotation
+
 
 
 class GameState:
