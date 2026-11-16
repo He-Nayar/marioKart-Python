@@ -2,7 +2,8 @@ import pygame
 import math
 from constants import (
     CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, 
-    FROTTEMENT, BRAQUAGE_MAX, FACTEUR_DE_ROT
+    FROTTEMENT, BRAQUAGE_MAX, FACTEUR_DE_ROT, SEUIL_DERAPAGE, ADHERENCE_DERAPAGE,
+    FROTTEMENT_DERAPAGE, SEUIL_SORTIE_DERAPAGE
 )
 
 
@@ -17,11 +18,20 @@ class Car:
         self.angle: float = 0.0
         self.sprite = self.build_sprite()
         self.steering_angle : float = 0.0  # braquage des roues (0 = roues droites)
+        self.drifting : bool = False #True si la voiture est en train de deraper 
 
     def forward_speed(self) -> float :
         #vitesse dans le sens du nez de la voiture
         rad = math.radians(self.angle)
         return self.vx * math.cos(rad) + self.vy * math.sin(rad)
+
+    def lateral_speed(self) -> float: 
+        # la vitesse sur le cote
+        # elle est a 0 quand la voiture ne derape pas
+        rad = math.radians(self.angle)
+        return -self.vx * math.sin(rad) + self.vy * math.cos(rad)
+
+
     def accelerate(self) -> None:
         #self.speed +=  CAR_ACCELERATION
         rad = math.radians(self.angle)
@@ -37,6 +47,7 @@ class Car:
         self.steering_angle = -BRAQUAGE_MAX  # on suit le repere de pygame donc y pointe vers le bas
     def turnRight(self):
         self.steering_angle = BRAQUAGE_MAX 
+
     def update_position(self) -> None:
         #frottement de l'air sur les deux composantes
         self.vx = self.vx * FROTTEMENT
@@ -44,11 +55,25 @@ class Car:
         #la voiture tourne selon sa vitesse vers l'avant et le braquage
         v = self.forward_speed()
         self.angle += FACTEUR_DE_ROT * v * self.steering_angle
-        #la vitesse est remise dans l'axe du nez
+        # l entree en derapage 
+        if not self.drifting and abs(v*self.steering_angle) > SEUIL_DERAPAGE :
+            self.drifting = True
+            print(" derapage ")
         rad = math.radians(self.angle)
-        self.vx = v * math.cos(rad)
-        self.vy = v * math.sin(rad)
-        #en deplacement
+        if self.drifting:
+            self.vx = self.vx * FROTTEMENT_DERAPAGE
+            self.vy = self.vy * FROTTEMENT_DERAPAGE
+            v = self.forward_speed()
+            self.vx += ADHERENCE_DERAPAGE * (v * math.cos(rad) - self.vx)
+            self.vy += ADHERENCE_DERAPAGE * (v * math.sin(rad) - self.vy)
+            if abs(self.lateral_speed()) < SEUIL_SORTIE_DERAPAGE and abs(v * self.steering_angle) <= SEUIL_DERAPAGE:
+                self.drifting = False # sortir de derapage
+                print("fin de derapage")
+        else:
+            # en adherence la vitesse suit exactement le nez
+            self.vx = v * math.cos(rad)
+            self.vy = v * math.sin(rad)
+    
         self.x += self.vx
         self.y += self.vy
         self.steering_angle = 0.0
