@@ -14,10 +14,11 @@ CAR_HEIGHT = 50
 FROTTEMENT = 0.98
 BRAQUAGE_MAX = 30 #angle de braquage max des roues
 FACTEUR_DE_ROT = 0.02 #un facteur pour ajuster la vitesse de rotation
-SEUIL_DERAPAGE = 10 #si la vitesse * braqauge depasse le seuil la voiture derape
-ADHERENCE_DERAPAGE = 0.01 #part de la vitesse realignee sur le nez a chaque image en derapage
+SEUIL_DERAPAGE = 60 #si la vitesse * braqauge depasse le seuil la voiture derape
+ADHERENCE_DERAPAGE = 0.05 #part de la vitesse realignee sur le nez a chaque image en derapage
 SEUIL_SORTIE_DERAPAGE = 0.1    # fin du derapage si la vitesse laterale passe sous ce seuil
-FROTTEMENT_DERAPAGE = 0.995
+FROTTEMENT_DERAPAGE = 0.98
+CAR_REVERSE_ACCELERATION = 0.03 # acceleration en marche arriere plus faible qu en avant
 
 
 

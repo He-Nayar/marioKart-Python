@@ -3,7 +3,7 @@ import math
 from constants import (
     CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, 
     FROTTEMENT, BRAQUAGE_MAX, FACTEUR_DE_ROT, SEUIL_DERAPAGE, ADHERENCE_DERAPAGE,
-    FROTTEMENT_DERAPAGE, SEUIL_SORTIE_DERAPAGE
+    FROTTEMENT_DERAPAGE, SEUIL_SORTIE_DERAPAGE, CAR_REVERSE_ACCELERATION
 )
 
 
@@ -12,7 +12,6 @@ class Car:
     def __init__(self, start_col: int, start_row: int):
         self.x = start_col * TILE_SIZE + TILE_SIZE // 2
         self.y = start_row * TILE_SIZE + TILE_SIZE // 2
-        #self.speed: float = 0.0
         self.vx : float = 0.0 # vitesse horizontale
         self.vy : float = 0.0 # vitesse verticale
         self.angle: float = 0.0
@@ -33,16 +32,20 @@ class Car:
 
 
     def accelerate(self) -> None:
-        #self.speed +=  CAR_ACCELERATION
         rad = math.radians(self.angle)
         self.vx += CAR_ACCELERATION * math.cos(rad)
         self.vy += CAR_ACCELERATION * math.sin(rad)
     # ajout des methodes pour les autres touches et directions
     def brakesR(self):
-        #self.speed -= CAR_DECELERATION
         rad = math.radians(self.angle)
-        self.vx -= CAR_DECELERATION * math.cos(rad)
-        self.vy -= CAR_DECELERATION * math.sin(rad)
+        if self.forward_speed()>0 :
+            force = CAR_DECELERATION
+        else:
+            # rendre la marcge arriere plus lente
+            force = CAR_REVERSE_ACCELERATION
+        
+        self.vx -= force * math.cos(rad)
+        self.vy -= force * math.sin(rad)
     def turnLeft(self):
         self.steering_angle = -BRAQUAGE_MAX  # on suit le repere de pygame donc y pointe vers le bas
     def turnRight(self):
