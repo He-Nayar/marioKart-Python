@@ -41,14 +41,14 @@ class GameView:
             self.screen.blit(text_surf, text_surf.get_rect(center=rect.center))
 
     def _draw_racing(self, model: GameModel) -> None:
-
+        if model.circuit is None:
+            return
         for row_idx, row in enumerate(model.circuit.grid):
             for col_idx, tile in enumerate(row):
                 sprite = tile.get_sprite(TILE_SIZE)
                 self.screen.blit(
                     sprite, (col_idx * TILE_SIZE, row_idx * TILE_SIZE))
 
-        if model.circuit is None:
-            return
-        surf, rect = model.car.get_rotated_sprite()
-        self.screen.blit(surf, rect)
+        for car in model.cars:
+            surf, rect = car.get_rotated_sprite()
+            self.screen.blit(surf, rect)

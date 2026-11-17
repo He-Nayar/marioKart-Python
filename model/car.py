@@ -3,22 +3,24 @@ import math
 from constants import (
     CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, 
     FROTTEMENT, BRAQUAGE_MAX, FACTEUR_DE_ROT, SEUIL_DERAPAGE, ADHERENCE_DERAPAGE,
-    FROTTEMENT_DERAPAGE, SEUIL_SORTIE_DERAPAGE, CAR_REVERSE_ACCELERATION
+    FROTTEMENT_DERAPAGE, SEUIL_SORTIE_DERAPAGE, CAR_REVERSE_ACCELERATION,
 )
 
 
 class Car:
     """Voiture du joueur avec sa position, vitesse (vx, vy), orientation, braquage et derapage."""
-    def __init__(self, start_col: int, start_row: int):
+    def __init__(self, start_col: int, start_row: int, color : tuple):
         """Cree la voiture au centre de la case (start_col, start_row), a l'arret."""
         self.x = start_col * TILE_SIZE + TILE_SIZE // 2
         self.y = start_row * TILE_SIZE + TILE_SIZE // 2
         self.vx : float = 0.0 # vitesse horizontale
         self.vy : float = 0.0 # vitesse verticale
         self.angle: float = 0.0
+        self.color = color #couleur de la voiture
         self.sprite = self.build_sprite()
         self.steering_angle : float = 0.0  # braquage des roues (0 = roues droites)
         self.drifting : bool = False #True si la voiture est en train de deraper 
+        
 
     def forward_speed(self) -> float :
         """Renvoie la vitesse vers l'avant, elle est négative en marche arriere"""
@@ -91,7 +93,7 @@ class Car:
     def build_sprite(self) -> pygame.Surface:
         """ dessine l image de la voiture"""
         surf = pygame.Surface((CAR_HEIGHT, CAR_WIDTH), pygame.SRCALPHA)
-        pygame.draw.rect(surf, (255, 0, 0), (0, 0,CAR_HEIGHT,
+        pygame.draw.rect(surf, self.color, (0, 0,CAR_HEIGHT,
                          CAR_WIDTH), border_radius=5)
         nez = 10
         pygame.draw.rect(surf,(255,255,0),(CAR_HEIGHT - nez, 0, nez, CAR_WIDTH))

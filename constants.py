@@ -7,8 +7,7 @@ GRID_COLS = 16
 GRID_ROWS = 12
 
 CAR_ACCELERATION = 0.05
-CAR_DECELERATION = 0.07 #ajouter pour utiliser les freins et la marche arriere dans brakesR
-#CAR_ROTATION_SPEED = 1.5
+CAR_DECELERATION = 0.07 #ajouter pour utiliser les freins et la marche arriere dans brakes
 CAR_WIDTH = 30
 CAR_HEIGHT = 50
 FROTTEMENT = 0.98
@@ -20,7 +19,8 @@ SEUIL_SORTIE_DERAPAGE = 0.1    # fin du derapage si la vitesse laterale passe so
 FROTTEMENT_DERAPAGE = 0.98
 CAR_REVERSE_ACCELERATION = 0.03 # acceleration en marche arriere plus faible qu en avant
 
-
+CAR_COLOR_P1 = (255, 0, 0)       # couleur de la voiture du joueur 1 (rouge)
+CAR_COLOR_P2 = (0, 0, 255)     # couleur de la voiture du joueur 2 (bleu)
 
 class GameState:
     MENU = "menu"

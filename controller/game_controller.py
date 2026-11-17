@@ -6,8 +6,7 @@ from constants import (
 )
 from model.game_model import GameModel
 from view.game_view import GameView
-from controller.input_handler import InputHandler
-
+from controller.input_handler import InputHandler, MAPPING_P1, MAPPING_P2
 
 class GameController:
 
@@ -16,7 +15,8 @@ class GameController:
         self.clock = pygame.time.Clock()
         self.model = GameModel()
         self.view = GameView(self.screen)
-        self.input_handler = InputHandler()
+        self.input_p1 = InputHandler(MAPPING_P1)
+        self.input_p2 = InputHandler(MAPPING_P2)
         self.running = True
 
     def run(self) -> None:
@@ -52,9 +52,10 @@ class GameController:
         if self.model.state != GameState.RACING:
             return
 
-        p1_input = self.input_handler.get_inputs()
-        car = self.model.car
-        self.apply_input(car, p1_input)
+        p1_input = self.input_p1.get_inputs()
+        p2_input = self.input_p2.get_inputs()
+        self.apply_input(self.model.cars[0], p1_input)
+        self.apply_input(self.model.cars[1], p2_input)
         self.model.update()
 
     def apply_input(self, car, player_input) -> None:
