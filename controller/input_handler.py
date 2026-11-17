@@ -4,9 +4,9 @@ import pygame
 MAPPING = {
     pygame.K_UP:     "accelerate",
     # rajouter les autres touches pour bouger
-    pygame.K_DOWN:     "brakesR",
-    pygame.K_RIGHT:    "turnRight",
-    pygame.K_LEFT:    "turnLeft"
+    pygame.K_DOWN:     "brakes",
+    pygame.K_RIGHT:    "turn_right",
+    pygame.K_LEFT:    "turn_left"
 }
 
 

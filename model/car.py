@@ -8,8 +8,9 @@ from constants import (
 
 
 class Car:
-
+    """Voiture du joueur avec sa position, vitesse (vx, vy), orientation, braquage et derapage."""
     def __init__(self, start_col: int, start_row: int):
+        """Cree la voiture au centre de la case (start_col, start_row), a l'arret."""
         self.x = start_col * TILE_SIZE + TILE_SIZE // 2
         self.y = start_row * TILE_SIZE + TILE_SIZE // 2
         self.vx : float = 0.0 # vitesse horizontale
@@ -20,23 +21,25 @@ class Car:
         self.drifting : bool = False #True si la voiture est en train de deraper 
 
     def forward_speed(self) -> float :
-        #vitesse dans le sens du nez de la voiture
+        """Renvoie la vitesse vers l'avant, elle est négative en marche arriere"""
         rad = math.radians(self.angle)
         return self.vx * math.cos(rad) + self.vy * math.sin(rad)
 
     def lateral_speed(self) -> float: 
-        # la vitesse sur le cote
-        # elle est a 0 quand la voiture ne derape pas
+        """Renvoie la vitesse sur le coté perpendiculaire au nez, elle est nulle si la voiture ne glisse pas"""
         rad = math.radians(self.angle)
         return -self.vx * math.sin(rad) + self.vy * math.cos(rad)
 
 
     def accelerate(self) -> None:
+        """Pousse la voiture vers l'avant"""
         rad = math.radians(self.angle)
         self.vx += CAR_ACCELERATION * math.cos(rad)
         self.vy += CAR_ACCELERATION * math.sin(rad)
+
     # ajout des methodes pour les autres touches et directions
-    def brakesR(self):
+    def brakes(self) -> None:
+        """Freine si la voiture avance sinon elle recule"""
         rad = math.radians(self.angle)
         if self.forward_speed()>0 :
             force = CAR_DECELERATION
@@ -46,12 +49,17 @@ class Car:
         
         self.vx -= force * math.cos(rad)
         self.vy -= force * math.sin(rad)
-    def turnLeft(self):
+
+    def turn_left(self) -> None:
+        """Braquage des roues vers la gauche"""
         self.steering_angle = -BRAQUAGE_MAX  # on suit le repere de pygame donc y pointe vers le bas
-    def turnRight(self):
+    
+    def turn_right(self) -> None:
+        """Braquage des roues vers la droite"""
         self.steering_angle = BRAQUAGE_MAX 
 
     def update_position(self) -> None:
+        """Mets a jour la voiture a chaque image en prenant en compte le frottement, la rotation, derapage et le deplacement"""
         #frottement de l'air sur les deux composantes
         self.vx = self.vx * FROTTEMENT
         self.vy = self.vy * FROTTEMENT
@@ -81,6 +89,7 @@ class Car:
         self.y += self.vy
         self.steering_angle = 0.0
     def build_sprite(self) -> pygame.Surface:
+        """ dessine l image de la voiture"""
         surf = pygame.Surface((CAR_HEIGHT, CAR_WIDTH), pygame.SRCALPHA)
         pygame.draw.rect(surf, (255, 0, 0), (0, 0,CAR_HEIGHT,
                          CAR_WIDTH), border_radius=5)
@@ -89,6 +98,7 @@ class Car:
         return surf
 
     def get_rotated_sprite(self) -> tuple[pygame.Surface, pygame.Rect]:
+        """Renvoie l image de la voiture selon son angle et sa position"""
         rotated = pygame.transform.rotate(self.sprite, -self.angle)
         rect = rotated.get_rect(center=(int(self.x), int(self.y)))
         return rotated, rect

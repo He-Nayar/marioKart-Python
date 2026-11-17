@@ -60,14 +60,14 @@ class GameController:
     def apply_input(self, car, player_input) -> None:
         if player_input['accelerate']:
             car.accelerate()
-        # ajoute des autres touches pour les directions
+        # ajout des autres touches pour les directions
         # les noms sont dans le fichier "input_handler"
-        if player_input['brakesR']:
-            car.brakesR()
-        if player_input['turnLeft']:
-            car.turnLeft()
-        if player_input['turnRight']:
-            car.turnRight()
+        if player_input['brakes']:
+            car.brakes()
+        if player_input['turn_left']:
+            car.turn_left()
+        if player_input['turn_right']:
+            car.turn_right()
 
     def render(self) -> None:
         self.view.draw(self.model)
