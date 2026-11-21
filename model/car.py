@@ -20,7 +20,23 @@ class Car:
         self.sprite = self.build_sprite()
         self.steering_angle : float = 0.0  # braquage des roues (0 = roues droites)
         self.drifting : bool = False #True si la voiture est en train de deraper 
-        
+        #proprietes du terrain sous la voitue, qui change avec set_grip
+        self.seuil_derapage : float = SEUIL_DERAPAGE
+        self.adherence_derapage : float = ADHERENCE_DERAPAGE
+        self.frottement_derapage : float = FROTTEMENT_DERAPAGE
+
+    def get_tile_position(self) -> tuple[int, int]:
+        """ Renvoie la case de la grille ou se trouve la voiture (col, row)"""
+        col = int(self.x // TILE_SIZE)
+        row = int(self.y // TILE_SIZE)
+        return col,row
+
+    def set_grip(self, seuil: float, adherence: float, frottement: float) -> None:
+        """Donne a la voiture les proprietes du terrain ou elle est"""
+        self.seuil_derapage = seuil
+        self.adherence_derapage = adherence
+        self.frottement_derapage = frottement
+
 
     def forward_speed(self) -> float :
         """Renvoie la vitesse vers l'avant, elle est négative en marche arriere"""
@@ -69,17 +85,17 @@ class Car:
         v = self.forward_speed()
         self.angle += FACTEUR_DE_ROT * v * self.steering_angle
         # l entree en derapage 
-        if not self.drifting and abs(v*self.steering_angle) > SEUIL_DERAPAGE :
+        if not self.drifting and abs(v*self.steering_angle) > self.seuil_derapage :
             self.drifting = True
             print(" derapage ")
         rad = math.radians(self.angle)
         if self.drifting:
-            self.vx = self.vx * FROTTEMENT_DERAPAGE
-            self.vy = self.vy * FROTTEMENT_DERAPAGE
+            self.vx = self.vx * self.frottement_derapage
+            self.vy = self.vy * self.frottement_derapage
             v = self.forward_speed()
-            self.vx += ADHERENCE_DERAPAGE * (v * math.cos(rad) - self.vx)
-            self.vy += ADHERENCE_DERAPAGE * (v * math.sin(rad) - self.vy)
-            if abs(self.lateral_speed()) < SEUIL_SORTIE_DERAPAGE and abs(v * self.steering_angle) <= SEUIL_DERAPAGE:
+            self.vx += self.adherence_derapage* (v * math.cos(rad) - self.vx)
+            self.vy += self.adherence_derapage * (v * math.sin(rad) - self.vy)
+            if abs(self.lateral_speed()) < SEUIL_SORTIE_DERAPAGE and abs(v * self.steering_angle) <= self.seuil_derapage:
                 self.drifting = False # sortir de derapage
                 print("fin de derapage")
         else:
