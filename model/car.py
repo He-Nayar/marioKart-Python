@@ -4,6 +4,7 @@ from constants import (
     CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, 
     FROTTEMENT, BRAQUAGE_MAX, FACTEUR_DE_ROT, SEUIL_DERAPAGE, ADHERENCE_DERAPAGE,
     FROTTEMENT_DERAPAGE, SEUIL_SORTIE_DERAPAGE, CAR_REVERSE_ACCELERATION,
+    CAR_BOOST_ACCELERATION, CAR_BOOST_DURATION
 )
 
 
@@ -28,6 +29,7 @@ class Car:
         self.checkpoint_x : float = self.x
         self.checkpoint_y : float = self.y
         self.checkpoint_angle : float = self.angle
+        self.boost_timer : int = 0 # nombre d'images de boost restantes
 
     def get_tile_position(self) -> tuple[int, int]:
         """ Renvoie la case de la grille ou se trouve la voiture (col, row)"""
@@ -55,6 +57,10 @@ class Car:
         self.vx = 0.0 # remet ma voiture a l'arret
         self.vy = 0.0
         self.drifting = False
+
+    def boost(self) -> None:
+        """Lance un boost pendant AR_BOOST_DURATION images"""
+        self.boost_timer = CAR_BOOST_DURATION
 
     def forward_speed(self) -> float :
         """Renvoie la vitesse vers l'avant, elle est négative en marche arriere"""
@@ -96,6 +102,11 @@ class Car:
 
     def update_position(self) -> None:
         """Mets a jour la voiture a chaque image en prenant en compte le frottement, la rotation, derapage et le deplacement"""
+        if self.boost_timer > 0 :
+            rad = math.radians(self.angle)
+            self.vx += CAR_BOOST_ACCELERATION * math.cos(rad)
+            self.vy += CAR_BOOST_ACCELERATION * math.sin(rad)
+            self.boost_timer -=1
         #frottement de l'air sur les deux composantes
         self.vx = self.vx * FROTTEMENT
         self.vy = self.vy * FROTTEMENT

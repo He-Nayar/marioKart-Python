@@ -19,9 +19,11 @@ SEUIL_SORTIE_DERAPAGE = 0.1    # fin du derapage si la vitesse laterale passe so
 FROTTEMENT_DERAPAGE = 0.98
 CAR_REVERSE_ACCELERATION = 0.03 # acceleration en marche arriere plus faible qu en avant
 
-CAR_COLOR_P1 = (255, 0, 0)       # couleur de la voiture du joueur 1 (rouge)
-CAR_COLOR_P2 = (0, 0, 255)     # couleur de la voiture du joueur 2 (bleu)
+CAR_COLOR_P1 = (255, 0, 0) # couleur de la voiture du joueur 1 (rouge)
+CAR_COLOR_P2 = (0, 0, 255) # couleur de la voiture du joueur 2 (bleu)
 
+CAR_BOOST_ACCELERATION = 0.08
+CAR_BOOST_DURATION = 60
 class GameState:
     MENU = "menu"
     RACING = "racing"
