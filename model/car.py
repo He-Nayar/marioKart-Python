@@ -4,7 +4,7 @@ from constants import (
     CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, CAR_DECELERATION, 
     FROTTEMENT, BRAQUAGE_MAX, FACTEUR_DE_ROT, SEUIL_DERAPAGE, ADHERENCE_DERAPAGE,
     FROTTEMENT_DERAPAGE, SEUIL_SORTIE_DERAPAGE, CAR_REVERSE_ACCELERATION,
-    CAR_BOOST_ACCELERATION, CAR_BOOST_DURATION
+    CAR_BOOST_ACCELERATION, CAR_BOOST_DURATION, TRACTION_DEFAUT
 )
 
 
@@ -30,6 +30,7 @@ class Car:
         self.checkpoint_y : float = self.y
         self.checkpoint_angle : float = self.angle
         self.boost_timer : int = 0 # nombre d'images de boost restantes
+        self.traction : float = TRACTION_DEFAUT
 
     def get_tile_position(self) -> tuple[int, int]:
         """ Renvoie la case de la grille ou se trouve la voiture (col, row)"""
@@ -37,11 +38,12 @@ class Car:
         row = int(self.y // TILE_SIZE)
         return col,row
 
-    def set_grip(self, seuil: float, adherence: float, frottement: float) -> None:
-        """Donne a la voiture les proprietes du terrain ou elle est"""
+    def set_grip(self, seuil: float, adherence: float, frottement: float, traction: float) -> None:
+        """Donne a la voiture les proprietes du terrain ou elle est pour le derapage et la traction"""
         self.seuil_derapage = seuil
         self.adherence_derapage = adherence
         self.frottement_derapage = frottement
+        self.traction = self.traction
 
     def set_checkpoint(self) -> None:
         """Retient la position actuel et l angle de la voiture au dernier passage"""
@@ -59,7 +61,7 @@ class Car:
         self.drifting = False
 
     def boost(self) -> None:
-        """Lance un boost pendant AR_BOOST_DURATION images"""
+        """Lance un boost pendant CAR_BOOST_DURATION images"""
         self.boost_timer = CAR_BOOST_DURATION
 
     def forward_speed(self) -> float :
@@ -76,8 +78,8 @@ class Car:
     def accelerate(self) -> None:
         """Pousse la voiture vers l'avant"""
         rad = math.radians(self.angle)
-        self.vx += CAR_ACCELERATION * math.cos(rad)
-        self.vy += CAR_ACCELERATION * math.sin(rad)
+        self.vx += self.traction * CAR_ACCELERATION * math.cos(rad)
+        self.vy += self.traction * CAR_ACCELERATION * math.sin(rad)
 
     # ajout des methodes pour les autres touches et directions
     def brakes(self) -> None:
@@ -89,8 +91,8 @@ class Car:
             # rendre la marcge arriere plus lente
             force = CAR_REVERSE_ACCELERATION
         
-        self.vx -= force * math.cos(rad)
-        self.vy -= force * math.sin(rad)
+        self.vx -= self.traction * force * math.cos(rad)
+        self.vy -= self.traction * force * math.sin(rad)
 
     def turn_left(self) -> None:
         """Braquage des roues vers la gauche"""

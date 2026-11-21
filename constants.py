@@ -24,6 +24,9 @@ CAR_COLOR_P2 = (0, 0, 255) # couleur de la voiture du joueur 2 (bleu)
 
 CAR_BOOST_ACCELERATION = 0.08
 CAR_BOOST_DURATION = 60
+
+TRACTION_DEFAUT = 1.0 #traction par defaut de la route qui est a 100% pour les friens et force du moteur
+
 class GameState:
     MENU = "menu"
     RACING = "racing"
