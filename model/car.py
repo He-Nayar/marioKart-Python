@@ -24,6 +24,10 @@ class Car:
         self.seuil_derapage : float = SEUIL_DERAPAGE
         self.adherence_derapage : float = ADHERENCE_DERAPAGE
         self.frottement_derapage : float = FROTTEMENT_DERAPAGE
+        #dernier point de passage pour les checkpoints
+        self.checkpoint_x : float = self.x
+        self.checkpoint_y : float = self.y
+        self.checkpoint_angle : float = self.angle
 
     def get_tile_position(self) -> tuple[int, int]:
         """ Renvoie la case de la grille ou se trouve la voiture (col, row)"""
@@ -37,6 +41,20 @@ class Car:
         self.adherence_derapage = adherence
         self.frottement_derapage = frottement
 
+    def set_checkpoint(self) -> None:
+        """Retient la position actuel et l angle de la voiture au dernier passage"""
+        self.checkpoint_x =self.x
+        self.checkpoint_y =self.y
+        self.checkpoint_angle =self.angle
+
+    def respawn(self)-> None:
+        """Remet la voiture au derniert point de passage"""
+        self.x = self.checkpoint_x
+        self.y = self.checkpoint_y
+        self.angle = self.checkpoint_angle
+        self.vx = 0.0 # remet ma voiture a l'arret
+        self.vy = 0.0
+        self.drifting = False
 
     def forward_speed(self) -> float :
         """Renvoie la vitesse vers l'avant, elle est négative en marche arriere"""
