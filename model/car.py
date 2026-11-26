@@ -43,7 +43,7 @@ class Car:
         self.seuil_derapage = seuil
         self.adherence_derapage = adherence
         self.frottement_derapage = frottement
-        self.traction = self.traction
+        self.traction = traction
 
     def set_checkpoint(self) -> None:
         """Retient la position actuel et l angle de la voiture au dernier passage"""
