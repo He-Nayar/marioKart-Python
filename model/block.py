@@ -19,7 +19,10 @@ class StartBlock(Block):
         self.player=player
 
     def on_enter(self,car) -> None:
-        """ le depart n'a aucun effet sur la voiture"""
+        """ le depart est pris comme un checkpoint"""
+        def on_enter(self, car) ->None:
+            car.set_checkpoint()
+
 
 class CheckpointBlock(Block):
     """point de passage : la voiture memorise sa position"""
